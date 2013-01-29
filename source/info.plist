@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>bundleid</key>
+	<string>dk.simonbs.Alfred.SafariTabs</string>
+	<key>connections</key>
+	<dict>
+		<key>8435392A-8D77-40AC-B6E8-095C89A304A0</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>FC13706C-9816-4E0A-BF88-4F83CAC5C4B4</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+			</dict>
+			<dict>
+				<key>destinationuid</key>
+				<string>3B47128E-09B1-4E60-A9DE-E53EB5EC7541</string>
+				<key>modifiers</key>
+				<integer>524288</integer>
+				<key>modifiersubtext</key>
+				<string>Send tab in e-mail</string>
+			</dict>
+			<dict>
+				<key>destinationuid</key>
+				<string>7A7FB702-1905-4EC8-BDA8-89213B31D347</string>
+				<key>modifiers</key>
+				<integer>262144</integer>
+				<key>modifiersubtext</key>
+				<string>Close all tabs and windows but this tab</string>
+			</dict>
+			<dict>
+				<key>destinationuid</key>
+				<string>FAB2EE77-7535-4B28-8CD8-4BDCEEB1BCF9</string>
+				<key>modifiers</key>
+				<integer>1048576</integer>
+				<key>modifiersubtext</key>
+				<string>Close tab</string>
+			</dict>
+		</array>
+		<key>FC13706C-9816-4E0A-BF88-4F83CAC5C4B4</key>
+		<array/>
+	</dict>
+	<key>createdby</key>
+	<string>Simon Støvring (@simonbs)</string>
+	<key>description</key>
+	<string>Manage tabs in Safari</string>
+	<key>name</key>
+	<string>Safari Tabs</string>
+	<key>objects</key>
+	<array>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>escaping</key>
+				<integer>4</integer>
+				<key>script</key>
+				<string>from tabs import close_all_tabs_but_selected
+
+close_all_tabs_but_selected("{query}")</string>
+				<key>type</key>
+				<integer>3</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>7A7FB702-1905-4EC8-BDA8-89213B31D347</string>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>escaping</key>
+				<integer>0</integer>
+				<key>script</key>
+				<string>from tabs import email_tab
+
+email_tab("{query}")</string>
+				<key>type</key>
+				<integer>3</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>3B47128E-09B1-4E60-A9DE-E53EB5EC7541</string>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>escaping</key>
+				<integer>0</integer>
+				<key>script</key>
+				<string>from tabs import focus_tab
+
+print(focus_tab("{query}"))</string>
+				<key>type</key>
+				<integer>3</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>FC13706C-9816-4E0A-BF88-4F83CAC5C4B4</string>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>escaping</key>
+				<integer>0</integer>
+				<key>script</key>
+				<string>from tabs import close_tab
+
+close_tab("{query}")</string>
+				<key>type</key>
+				<integer>3</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>FAB2EE77-7535-4B28-8CD8-4BDCEEB1BCF9</string>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argumenttype</key>
+				<integer>1</integer>
+				<key>escaping</key>
+				<integer>0</integer>
+				<key>keyword</key>
+				<string>tabs</string>
+				<key>script</key>
+				<string>from tabs import show_tabs
+
+print(show_tabs("{query}"))</string>
+				<key>title</key>
+				<string>Search for tabs</string>
+				<key>type</key>
+				<integer>3</integer>
+				<key>withspace</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>8435392A-8D77-40AC-B6E8-095C89A304A0</string>
+		</dict>
+	</array>
+	<key>uidata</key>
+	<dict>
+		<key>3B47128E-09B1-4E60-A9DE-E53EB5EC7541</key>
+		<dict>
+			<key>ypos</key>
+			<real>130</real>
+		</dict>
+		<key>7A7FB702-1905-4EC8-BDA8-89213B31D347</key>
+		<dict>
+			<key>ypos</key>
+			<real>250</real>
+		</dict>
+		<key>8435392A-8D77-40AC-B6E8-095C89A304A0</key>
+		<dict>
+			<key>ypos</key>
+			<real>10</real>
+		</dict>
+		<key>FAB2EE77-7535-4B28-8CD8-4BDCEEB1BCF9</key>
+		<dict>
+			<key>ypos</key>
+			<real>370</real>
+		</dict>
+		<key>FC13706C-9816-4E0A-BF88-4F83CAC5C4B4</key>
+		<dict>
+			<key>ypos</key>
+			<real>10</real>
+		</dict>
+	</dict>
+	<key>webaddress</key>
+	<string>http://simonbs.com/</string>
+</dict>
+</plist>
