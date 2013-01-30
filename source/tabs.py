@@ -61,16 +61,13 @@ def focus_tab(query):
   tab_index = args["tab_index"]
   script = """
   tell application "Safari"
-    set win to window %s
-    tell win
-      set current tab to tab %s  
-    	set index to 1
-    	set visible to false
-    	set visible to true
-    end tell
+    tell window %s to set current tab to tab %s
     activate
   end tell
-  """ % (window_index, tab_index)
+  tell application "System Events" to tell process "Safari"
+    perform action "AXRaise" of window %s
+  end tell
+  """ % (window_index, tab_index, window_index)
   run_applescript(script)
 
 # E-mails a tab
