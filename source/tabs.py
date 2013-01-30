@@ -12,15 +12,28 @@ def show_tabs(query = ""):
     for tab in tabs:
       if query is None or query is "" or query in tab["name"] or query in tab["url"]:
         feedback.add_item(tab["name"], "", json_args({ "window_index": window["index"],
-                                                          "window_title": window["title"],
-                                                          "tab_index": tab["index"],
-                                                          "tab_name": tab["name"],
-                                                          "tab_url": tab["url"] }))
+                                                       "window_title": window["title"],
+                                                       "tab_index": tab["index"],
+                                                       "tab_name": tab["name"] }))
   return feedback
   
 # Retrieves the open windows and tabs
 def all_tabs():
   script = """
+  on findAndReplace(tofind, toreplace, TheString)
+  	set ditd to text item delimiters
+  	set text item delimiters to tofind
+  	set textItems to text items of TheString
+  	set text item delimiters to toreplace
+  	if (class of TheString is string) then
+  		set res to textItems as string
+  	else -- if (class of TheString is Unicode text) then
+  		set res to textItems as Unicode text
+  	end if
+  	set text item delimiters to ditd
+  	return res
+  end findAndReplace
+
   tell application "Safari"
   	set json to "{\\"windows\\":["
   	set winlist to every window
@@ -28,13 +41,13 @@ def all_tabs():
   	set i to 0
   	repeat with win in winlist
   		set winindex to index of win
-  		set wintitle to name of win
+  		tell me to set wintitle to findAndReplace("\\"", "\\\\\\"", (name of win))
   		set json to json & "{\\"index\\":" & winindex & ",\\"title\\":\\"" & wintitle & "\\",\\"tabs\\":["
   		set tabscount to count of every tab of win
   		set n to 0
   		repeat with t in every tab of win
   			set tabindex to index of t
-  			set tabname to name of t
+  			tell me to set tabname to findAndReplace("\\"", "\\\\\\"", (name of t))
   			set taburl to URL of t
   			set json to json & "{\\"index\\":" & tabindex & ",\\"name\\":\\"" & tabname & "\\",\\"url\\":\\"" & taburl & "\\"}"
   			set n to n + 1
@@ -118,11 +131,15 @@ def run_applescript(script):
 # Single quotes are used instead of double quotes because for some reason
 # it doesn't work with double quotes through Alfred.
 def json_args(args):
-  return json.dumps(args).replace("\"", "'")
+  new_args = {}
+  keys = args.keys()
+  for key in keys:
+    value = args[key]
+    if type(value) is str or type(value) is unicode:
+      value = value.replace("\"", "\\\"")
+    new_args[key] = value
+  return json.dumps(new_args).replace("\"", "'")
   
 # Creates arguments from a query created with json_args()
 def to_args(query):
   return json.loads(query.replace("'", "\""))
-  
-if __name__ == "__main__":
-  print all_tabs()
