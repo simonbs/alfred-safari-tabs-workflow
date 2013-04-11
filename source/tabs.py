@@ -14,7 +14,8 @@ def show_tabs(query = ""):
         feedback.add_item(tab["name"], "", json_args({ "window_index": window["index"],
                                                        "window_title": window["title"],
                                                        "tab_index": tab["index"],
-                                                       "tab_name": tab["name"] }))
+                                                       "tab_name": tab["name"],
+                                                       "tab_url": tab["url"] }))
   return feedback
   
 # Retrieves the open windows and tabs
