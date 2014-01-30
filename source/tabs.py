@@ -1,6 +1,7 @@
 import json
 from subprocess import Popen, PIPE
 from Feedback import Feedback
+import re
 
 # Returns tabs as feedback for Alfred
 def show_tabs(query = ""):
@@ -10,7 +11,7 @@ def show_tabs(query = ""):
   for window in windows:
     tabs = window["tabs"]
     for tab in tabs:
-      if query is None or query is "" or query in tab["name"] or query in tab["url"]:
+      if query is None or query is "" or query.lower() in tab["name"].lower() or query.lower() in tab["url"].lower():
         feedback.add_item(tab["name"], "", json_args({ "window_index": window["index"],
                                                        "window_title": window["title"],
                                                        "tab_index": tab["index"],
@@ -41,31 +42,36 @@ def all_tabs():
   	set winscount to count of winlist
   	set i to 0
   	repeat with win in winlist
-  		set winindex to index of win
-  		tell me to set wintitle to findAndReplace("\\"", "\\\\\\"", (name of win))
-  		set json to json & "{\\"index\\":" & winindex & ",\\"title\\":\\"" & wintitle & "\\",\\"tabs\\":["
-  		set tabscount to count of every tab of win
-  		set n to 0
-  		repeat with t in every tab of win
-  			set tabindex to index of t
-  			tell me to set tabname to findAndReplace("\\"", "\\\\\\"", (name of t))
-  			set taburl to URL of t
-  			set json to json & "{\\"index\\":" & tabindex & ",\\"name\\":\\"" & tabname & "\\",\\"url\\":\\"" & taburl & "\\"}"
-  			set n to n + 1
-  			if n is less than tabscount then
-  				set json to json & ","
-  			end if
-  		end repeat
-  		set json to json & "]}"
-  		set i to i + 1
-  		if i is less than winscount then
-  			set json to json & ","
-  		end if
+        if name of win is not "Privacy" then
+            set winindex to index of win
+            tell me to set wintitle to findAndReplace("\\"", " ", (name of win))
+            set json to json & "{\\"index\\":" & winindex & ",\\"title\\":\\"" & wintitle & "\\",\\"tabs\\":["
+            set tabscount to count of every tab of win
+            set n to 0
+            repeat with t in every tab of win
+                set tabindex to index of t
+                tell me to set tabname to findAndReplace("\\"", "'", (name of t))
+                set taburl to URL of t
+                set json to json & "{\\"index\\":" & tabindex & ",\\"name\\":\\"" & tabname & "\\",\\"url\\":\\"" & taburl & "\\"}"
+                set n to n + 1
+                if n is less than tabscount then
+                    set json to json & ","
+                end if
+            end repeat
+            set json to json & "]}"
+            set i to i + 1
+            if i is less than winscount then
+                set json to json & ","
+            end if
+        end if
   	end repeat
   	set json to json & "]}"
   	return json
   end tell"""
-  return json.loads(run_applescript(script))
+  output = run_applescript(script)
+  output = re.sub("\\\\x[a-z0-9]{2}", '', output)
+  output = re.sub(",\]", "]", output)
+  return json.loads(output)
 
 # Bring a tab to focus
 def focus_tab(query):
