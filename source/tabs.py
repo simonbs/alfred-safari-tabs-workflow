@@ -50,7 +50,7 @@ def all_tabs():
             set n to 0
             repeat with t in every tab of win
                 set tabindex to index of t
-                tell me to set tabname to findAndReplace("\\"", "'", (name of t))
+                tell me to set tabname to findAndReplace("\\"", " ", (name of t))
                 set taburl to URL of t
                 set json to json & "{\\"index\\":" & tabindex & ",\\"name\\":\\"" & tabname & "\\",\\"url\\":\\"" & taburl & "\\"}"
                 set n to n + 1
